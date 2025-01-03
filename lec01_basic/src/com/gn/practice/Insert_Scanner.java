@@ -51,8 +51,6 @@ public class Insert_Scanner {
 		    } else {
 		    	System.out.println("이미 존재하는 이름입니다.");
 		    }
-		    conn.commit();
-		    conn.setAutoCommit(true);
 		    
 		    String sql3 = "SELECT t_no ,t_name ,t_date FROM test WHERE t_name = '"+name+"'";
 		    rs = stmt.executeQuery(sql3);
@@ -65,6 +63,9 @@ public class Insert_Scanner {
 		    }
 		    
 		    System.out.println(t);
+		    
+		    conn.commit();
+		    conn.setAutoCommit(true);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
