@@ -45,7 +45,7 @@ public class Insert_Scanner {
 		    	int result = stmt.executeUpdate(sql2);
 		    	
 		    	if(result > 0)
-		    		System.out.println("성공");
+		    		System.out.println("성공");		    		
 		    	else
 		    		System.out.println("실패");
 		    } else {
@@ -62,6 +62,7 @@ public class Insert_Scanner {
 	            t.setTestDate(rs.getTimestamp("t_date").toLocalDateTime());
 		    }
 		    
+		    System.out.println("===== test =====");
 		    System.out.println(t);
 		    
 		    conn.commit();
