@@ -2,6 +2,7 @@ package com.gn.study.model.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -48,7 +49,50 @@ public class MemberDao {
 		// 전체 멤버를 조회 -> List<Member> 형태로 리턴할 것임
 		List<Member> list = new ArrayList<>();
 		// DB에 SQL문 요청 후 반환
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
 		
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			
+			String url = "jdbc:mariadb://127.0.0.1:3306/jdbc_basic";
+			String id = "scott";
+			String pw = "tiger";
+			conn = DriverManager.getConnection(url, id, pw);
+			
+			stmt = conn.createStatement();
+			
+			String sql = "SELECT m_no ,m_id ,m_pw ,m_name ,m_email ,m_phone ,m_gender ,reg_date ,mod_date FROM member";
+			rs = stmt.executeQuery(sql);
+			
+			while(rs.next()) {
+				Member m = new Member();
+				m.setMemberNo(rs.getInt("m_no"));
+				m.setMemberId(rs.getString("m_id"));
+				m.setMemberPw(rs.getString("m_pw"));
+				m.setMemberName(rs.getString("m_name"));
+				m.setMemberEmail(rs.getString("m_email"));
+				m.setMemberPhone(rs.getString("m_phone"));
+				m.setMemberGender(rs.getString("m_gender"));
+				m.setRegDate(rs.getTimestamp("reg_date").toLocalDateTime());
+				m.setModDate(rs.getTimestamp("mod_date").toLocalDateTime());
+				list.add(m);
+			}
+			return list;
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 		
 		return list;
 	}
