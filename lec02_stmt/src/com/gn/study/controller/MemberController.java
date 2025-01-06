@@ -33,7 +33,11 @@ public class MemberController {
 		return md.selectMemberByIdAndPw(id, pw);
 	}
 	
-	public int updateMemberInfo(String name, String phone, String email) {
-		return md.updateMemberInfo(name, phone, email);
+	public int updateMemberInfo(String id, String pw, String name, String phone, String email) {
+		return md.updateMemberInfo(id, pw, name, phone, email);
+	}
+	
+	public int deleteMember(String id, String pw) {
+		return md.deleteMember(id, pw);
 	}
 }

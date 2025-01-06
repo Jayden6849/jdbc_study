@@ -46,6 +46,7 @@ public class MemberMenu {
 				updateMember();
 				break;
 			case 6:
+				deleteMember();
 				break;
 			default:
 				System.out.println("올바른 메뉴를 선택해주세요");
@@ -132,8 +133,8 @@ public class MemberMenu {
 		Member m = mc.selectMemberByIdAndPw(id, pw);
 		
 		if(m != null) {
-			System.out.println(m);
 			// 이름, 전화번호, 이메일 -> 수정
+			System.out.println("--- 변경사항 ---");
 			System.out.print("이름 : ");
 			String name = sc.nextLine();
 			System.out.print("전화번호 : ");
@@ -141,16 +142,35 @@ public class MemberMenu {
 			System.out.print("이메일 : ");
 			String email = sc.nextLine();
 			
-			int result = mc.updateMemberInfo(name, phone, email);
+			int result = mc.updateMemberInfo(id, pw, name, phone, email);
 			if(result > 0) {
 				System.out.println("수정 성공");
 			} else {
 				System.out.println("수정 실패");
 			}
-			
-			System.out.println(m);
 		} else {
 			System.out.println("잘못된 아이디 혹은 비밀번호입니다.");
+		}
+	}
+	public void deleteMember() {
+		System.out.println("=== 회원탈퇴 ===");
+		System.out.print("아이디 : ");
+		String id = sc.nextLine();
+		System.out.print("비밀번호 : ");
+		String pw = sc.nextLine();
+		
+		Member m = mc.selectMemberByIdAndPw(id, pw);
+		
+		if(m != null) {
+			int result = mc.deleteMember(id, pw);
+			
+			if(result > 0) {
+				System.out.println("삭제 성공");
+			} else {
+				System.out.println("삭제 실패");
+			}
+		} else {
+			System.out.println("해당 사용자가 존재하지 않습니다.");
 		}
 	}
 }

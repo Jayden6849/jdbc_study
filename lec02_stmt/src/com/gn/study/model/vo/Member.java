@@ -18,6 +18,14 @@ public class Member {
 		super();
 	}
 
+	public Member(String memberId, String memberPw) {
+		super();
+		this.memberId = memberId;
+		this.memberPw = memberPw;
+		this.regDate = LocalDateTime.now();
+		this.modDate = LocalDateTime.now();
+	}
+
 	public Member(int memberNo, String memberId, String memberPw) {
 		super();
 		this.memberNo = memberNo;
