@@ -1,4 +1,4 @@
-package com.gn.study.model.vo;
+package com.gn.wmmusic.model.vo;
 
 public class Song {
 	private int songNo;
@@ -45,7 +45,6 @@ public class Song {
 
 	@Override
 	public String toString() {
-		return "Song [songNo=" + songNo + ", songName=" + songName + ", songArtist=" + songArtist + ", songPlay="
-				+ songPlay + "]";
+		return songNo + ". " + songArtist + " - " + songName;
 	}
 }

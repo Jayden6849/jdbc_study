@@ -2,8 +2,8 @@ package com.gn.wmmusic.controller;
 
 import java.util.List;
 
-import com.gn.study.model.vo.Song;
 import com.gn.wmmusic.model.dao.WmDao;
+import com.gn.wmmusic.model.vo.Song;
 import com.gn.wmmusic.model.vo.User;
 
 public class WmController {
@@ -33,8 +33,8 @@ public class WmController {
 		return wd.showAll();
 	}
 	
-	public int play(int no) {
-		return wd.play(no);
+	public int play(String id, int no) {
+		return wd.play(id, no);
 	}
 	
 	public User chkPw(String id, String chkPw) {

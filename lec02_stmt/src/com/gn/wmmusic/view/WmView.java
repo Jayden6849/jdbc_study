@@ -3,8 +3,8 @@ package com.gn.wmmusic.view;
 import java.util.List;
 import java.util.Scanner;
 
-import com.gn.study.model.vo.Song;
 import com.gn.wmmusic.controller.WmController;
+import com.gn.wmmusic.model.vo.Song;
 import com.gn.wmmusic.model.vo.User;
 
 public class WmView {
@@ -117,14 +117,17 @@ public class WmView {
 					case 99:
 						return;
 					case 1:
-						play();
+						play(id);
 						break;
 					case 2:
 						editUserName(id);
 						break;
 					case 3:
-						deleteUser(id, pw);
-						break;
+						if(deleteUser(id, pw) > 0) {
+							return;
+						} else {
+							break;							
+						}
 					default:
 						System.out.println("올바른 메뉴를 선택해주세요");
 						continue;
@@ -161,7 +164,7 @@ public class WmView {
 		}
 	}
 	
-	public void play() {
+	public void play(String id) {
 		System.out.println("--- 전체 음악 목록 ---");
 		List<Song> list = wc.showAll();
 		for(Song s : list) {
@@ -172,7 +175,7 @@ public class WmView {
 		int no = sc.nextInt();
 		sc.nextLine();
 		
-		int result = wc.play(no);
+		int result = wc.play(id, no);
 		
 		if(result > 0) {
 			System.out.println("재생");
@@ -205,26 +208,33 @@ public class WmView {
 		}
 	}
 	
-	public void deleteUser(String id, String pw) {
+	public int deleteUser(String id, String pw) {		
 		System.out.println("--- 회원 탈퇴 ---");
 		System.out.print("비밀번호 : ");
 		String chkPw = sc.nextLine();
 		
+		int cnt = 0;
+		
 		User result = wc.chkPw(id, chkPw);
 		if(result != null) {
-			System.out.print("정말 탈퇴하시겠습니까?(y/n)");
+			System.out.print("정말 탈퇴하시겠습니까?(y/n) : ");
 			String input = sc.nextLine();
 			
 			if("y".equalsIgnoreCase(input)) {
-				int cnt = wc.deleteUser(id, pw);
+				cnt = wc.deleteUser(id, pw);
 				
-				if(cnt > 0) System.out.println("회원 탈퇴 완료");
-				else System.out.println("회원 탈퇴 실패");
+				if(cnt > 0) {
+					System.out.println("회원 탈퇴 완료");
+				} else {
+					System.out.println("회원 탈퇴 실패");
+				}
 			} else {
-				return;
+				System.out.println("회원 탈퇴 취소");
+				return cnt;
 			}
 		} else {
 			System.out.println("비밀번호를 확인해주세요.");
 		}
+		return cnt;
 	}
 }

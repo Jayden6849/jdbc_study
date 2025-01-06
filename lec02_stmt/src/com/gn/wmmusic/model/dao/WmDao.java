@@ -8,7 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.gn.study.model.vo.Song;
+import com.gn.wmmusic.model.vo.Song;
 import com.gn.wmmusic.model.vo.User;
 
 public class WmDao {
@@ -264,7 +264,7 @@ public class WmDao {
 		return list;
 	}
 	
-	public int play(int no) {
+	public int play(String memId, int songNo) {
 		Connection conn = null;
 		Statement stmt = null;
 		
@@ -279,8 +279,10 @@ public class WmDao {
 			
 			stmt = conn.createStatement();
 			
-			String sql = "UPDATE wm_song SET song_play = song_play + 1 WHERE song_no = '"+no+"'";
+			String sql = "UPDATE wm_song SET song_play = song_play + 1 WHERE song_no = '"+songNo+"'";
 			result = stmt.executeUpdate(sql);
+			String sql2 = "INSERT INTO wm_play (play_userno ,play_songno) VALUES ((SELECT user_no FROM wm_user WHERE user_id = '"+memId+"') ,"+songNo+")";
+			stmt.executeUpdate(sql2);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -374,6 +376,35 @@ public class WmDao {
 	}
 	
 	public int deleteUser(String memId, String memPw) {
+		Connection conn = null;
+		Statement stmt = null;
 		
+		int result = 0;
+		
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			
+			String url = "jdbc:mariadb://127.0.0.1:3306/watermelon_music";
+			String id = "scott";
+			String pw = "tiger";
+			conn = DriverManager.getConnection(url, id, pw);
+			
+			stmt = conn.createStatement();
+			
+			String sql = "DELETE FROM wm_user WHERE user_id = '"+memId+"' AND user_pw = '"+memPw+"'";
+			result = stmt.executeUpdate(sql);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
 	}
 }
