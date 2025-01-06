@@ -169,6 +169,7 @@ public class MemberMenu {
 			} else {
 				System.out.println("삭제 실패");
 			}
+		
 		} else {
 			System.out.println("해당 사용자가 존재하지 않습니다.");
 		}
