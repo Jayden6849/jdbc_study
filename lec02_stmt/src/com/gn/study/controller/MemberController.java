@@ -28,4 +28,12 @@ public class MemberController {
 	public List<Member> searchMemberByKeyword(String keyword) {
 		return md.searchMemberByKeyword(keyword);
 	}
+	
+	public Member selectMemberByIdAndPw(String id, String pw) {
+		return md.selectMemberByIdAndPw(id, pw);
+	}
+	
+	public int updateMemberInfo(String name, String phone, String email) {
+		return md.updateMemberInfo(name, phone, email);
+	}
 }

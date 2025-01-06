@@ -185,4 +185,12 @@ public class MemberDao {
 		
 		return list;
 	}
+	
+	public Member selectMemberByIdAndPw(String id, String pw) {
+		return new Member();
+	}
+	
+	public int updateMemberInfo(String name, String phone, String email) {
+		return 0;
+	}
 }

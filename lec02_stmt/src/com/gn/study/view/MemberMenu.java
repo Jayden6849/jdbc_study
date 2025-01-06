@@ -43,6 +43,7 @@ public class MemberMenu {
 				searchMemberByKeyword();
 				break;
 			case 5:
+				updateMember();
 				break;
 			case 6:
 				break;
@@ -115,6 +116,41 @@ public class MemberMenu {
 			for(Member l : list) {
 				System.out.println(l);
 			}
+		}
+	}
+	
+	public void updateMember() {
+		// 관리자 -> 모든 회원의 정보 수정
+		// 일반사용자 -> 본인의 정보만 수정
+		// 사용자라고 가정하고 작업
+		System.out.println("=== 회원 정보 수정 ===");
+		System.out.print("아이디 : ");
+		String id = sc.nextLine();
+		System.out.print("비밀번호 : ");
+		String pw = sc.nextLine();
+		
+		Member m = mc.selectMemberByIdAndPw(id, pw);
+		
+		if(m != null) {
+			System.out.println(m);
+			// 이름, 전화번호, 이메일 -> 수정
+			System.out.print("이름 : ");
+			String name = sc.nextLine();
+			System.out.print("전화번호 : ");
+			String phone = sc.nextLine();
+			System.out.print("이메일 : ");
+			String email = sc.nextLine();
+			
+			int result = mc.updateMemberInfo(name, phone, email);
+			if(result > 0) {
+				System.out.println("수정 성공");
+			} else {
+				System.out.println("수정 실패");
+			}
+			
+			System.out.println(m);
+		} else {
+			System.out.println("잘못된 아이디 혹은 비밀번호입니다.");
 		}
 	}
 }
