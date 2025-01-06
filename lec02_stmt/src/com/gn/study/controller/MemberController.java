@@ -18,4 +18,14 @@ public class MemberController {
 		
 		return list;
 	}
+	
+	public Member searchMemberOneById(String memberId) {
+		Member m = md.searchMemberOneById(memberId);
+		
+		return m;
+	}
+	
+	public List<Member> searchMemberByKeyword(String keyword) {
+		return md.searchMemberByKeyword(keyword);
+	}
 }

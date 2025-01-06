@@ -17,6 +17,16 @@ public class Member {
 	public Member() {
 		super();
 	}
+
+	public Member(int memberNo, String memberId, String memberPw) {
+		super();
+		this.memberNo = memberNo;
+		this.memberId = memberId;
+		this.memberPw = memberPw;
+		this.regDate = LocalDateTime.now();
+		this.modDate = LocalDateTime.now();
+	}
+
 	public Member(String memberId, String memberPw, String memberName, String memberEmail, String memberPhone,
 			String memberGender) {
 		super();

@@ -79,7 +79,96 @@ public class MemberDao {
 				m.setModDate(rs.getTimestamp("mod_date").toLocalDateTime());
 				list.add(m);
 			}
-			return list;
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return list;
+	}
+	
+	public Member searchMemberOneById(String memId) {
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		
+		Member m = null;
+		
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			
+			String url = "jdbc:mariadb://127.0.0.1:3306/jdbc_basic";
+			String id = "scott";
+			String pwd = "tiger";
+			
+			conn = DriverManager.getConnection(url, id, pwd);
+			stmt = conn.createStatement();
+			
+			String SQL = "SELECT * FROM member WHERE m_id = '"+memId+"'";
+			rs = stmt.executeQuery(SQL);
+			
+			if(rs.next()) {
+				m = new Member(rs.getInt("m_no") ,rs.getString("m_id") ,rs.getString("m_pw"));
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return m;
+	}
+	
+	public List<Member> searchMemberByKeyword(String keyword) {
+		List<Member> list = new ArrayList<>();
+		
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			
+			String url = "jdbc:mariadb://127.0.0.1:3306/jdbc_basic";
+			String id = "scott";
+			String pwd = "tiger";
+			
+			conn = DriverManager.getConnection(url, id, pwd);
+			stmt = conn.createStatement();
+			
+			String SQL = "SELECT * FROM member where m_name LIKE '%"+keyword+"%'";
+			rs = stmt.executeQuery(SQL);
+			
+			while(rs.next()) {
+				Member m = new Member();
+				m.setMemberNo(rs.getInt("m_no"));
+				m.setMemberId(rs.getString("m_id"));
+				m.setMemberPw(rs.getString("m_pw"));
+				m.setMemberName(rs.getString("m_name"));
+				m.setMemberEmail(rs.getString("m_email"));
+				m.setMemberPhone(rs.getString("m_phone"));
+				m.setMemberGender(rs.getString("m_gender"));
+				m.setRegDate(rs.getTimestamp("reg_date").toLocalDateTime());
+				m.setModDate(rs.getTimestamp("mod_date").toLocalDateTime());
+				list.add(m);
+			}
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {

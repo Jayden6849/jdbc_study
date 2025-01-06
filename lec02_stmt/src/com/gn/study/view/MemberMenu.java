@@ -37,8 +37,10 @@ public class MemberMenu {
 				selectMemberAll();
 				break;
 			case 3:
+				searchMemberOneById();
 				break;
 			case 4:
+				searchMemberByKeyword();
 				break;
 			case 5:
 				break;
@@ -81,6 +83,35 @@ public class MemberMenu {
 		// 만약 list가 비어있다면?
 		if(list.isEmpty()) System.out.println("조회된 결과가 없습니다.");
 		else {
+			for(Member l : list) {
+				System.out.println(l);
+			}
+		}
+	}
+	
+	public void searchMemberOneById() {
+		System.out.println("=== 회원 아이디 검색 ===");
+		System.out.print("아이디 : ");
+		String id = sc.nextLine();
+		
+		Member m = mc.searchMemberOneById(id);
+		if(m != null) {
+			System.out.println(m);
+		} else {
+			System.out.println(id + "은(는) 존재하지 않는 정보입니다.");
+		}
+	}
+	
+	public void searchMemberByKeyword() {
+		System.out.println("=== 이름 키워드 검색 ===");
+		System.out.print("키워드 : ");
+		String keyword = sc.nextLine();
+		
+		List<Member> list = mc.searchMemberByKeyword(keyword);
+		
+		if(list.isEmpty()) {
+			System.out.println("해당하는 결과가 없습니다.");
+		} else {
 			for(Member l : list) {
 				System.out.println(l);
 			}
