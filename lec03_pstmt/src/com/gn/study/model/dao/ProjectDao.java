@@ -66,7 +66,9 @@ public class ProjectDao {
 			String pw = "tiger";
 			conn = DriverManager.getConnection(url, id, pw);
 			
-			String sql = "SELECT * FROM project";
+			String sql = "SELECT *"
+					+ " FROM project p"
+					+ " LEFT JOIN employee e ON p.project_manager = e.emp_id";
 			pstmt = conn.prepareStatement(sql);
 			
 			rs = pstmt.executeQuery();
@@ -74,11 +76,12 @@ public class ProjectDao {
 			list = new ArrayList<>();
 			while(rs.next()) {
 				ProjectVo vo = new ProjectVo();
-				vo.setProjectId(rs.getInt("project_id"));
-				vo.setProjectName(rs.getString("project_name"));
-				vo.setProjectManager(rs.getInt("project_manager"));
-				vo.setReg_date(rs.getTimestamp("reg_date").toLocalDateTime());
-				vo.setMod_date(rs.getTimestamp("mod_date").toLocalDateTime());
+				vo.setProjectId(rs.getInt("p.project_id"));
+				vo.setProjectName(rs.getString("p.project_name"));
+				vo.setProjectManager(rs.getInt("p.project_manager"));
+				vo.setManagerName(rs.getString("e.emp_name"));
+				vo.setReg_date(rs.getTimestamp("p.reg_date").toLocalDateTime());
+				vo.setMod_date(rs.getTimestamp("p.mod_date").toLocalDateTime());
 				list.add(vo);
 			}
 			
