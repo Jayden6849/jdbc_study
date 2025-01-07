@@ -151,4 +151,58 @@ public class ProjectDao {
 		
 		return list;
 	}
+	
+	public List<ProjectVo> selectProjectAllByManagerName(String managerName) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		List<ProjectVo> list = null;
+		
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			
+			String url = "jdbc:mariadb://127.0.0.1:3306/company_project";
+			String id = "scott";
+			String pw = "tiger";
+			conn = DriverManager.getConnection(url, id, pw);
+			
+			String sql = "SELECT *"
+					+ " FROM project p"
+					+ " LEFT JOIN employee e ON p.project_manager = e.emp_id"
+					+ " WHERE e.emp_name = ?";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, managerName);
+			
+			rs = pstmt.executeQuery();
+			
+			list = new ArrayList<>();
+			while(rs.next()) {
+				ProjectVo vo = new ProjectVo();
+				vo.setProjectId(rs.getInt("p.project_id"));
+				vo.setProjectName(rs.getString("p.project_name"));
+				vo.setProjectManager(rs.getInt("p.project_manager"));
+				vo.setManagerName(rs.getString("e.emp_name"));
+				vo.setReg_date(rs.getTimestamp("p.reg_date").toLocalDateTime());
+				vo.setMod_date(rs.getTimestamp("p.mod_date").toLocalDateTime());
+				list.add(vo);
+			}
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+				pstmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return list;
+	}
 }
