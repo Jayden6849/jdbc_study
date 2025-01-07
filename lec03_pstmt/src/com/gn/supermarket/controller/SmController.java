@@ -25,4 +25,9 @@ public class SmController {
 	public int insertProduct(String prodName, int prodPrice, int prodInven) {
 		return sd.insertProduct(prodName, prodPrice, prodInven);
 	}
+	
+	// sm_product 테이블에 제품번호가 일치하는 행의 입고 개수를 수정하는 로직
+	public int updateProduct(int prodNo, int amount) {
+		return sd.updateProduct(prodNo, amount);
+	}
 }

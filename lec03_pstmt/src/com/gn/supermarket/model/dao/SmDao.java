@@ -187,4 +187,43 @@ public class SmDao {
 		
 		return result;
 	}
+	
+	// sm_product 테이블에 제품번호가 일치하는 행의 입고 개수를 수정하는 로직
+	public int updateProduct(int prodNo, int amount) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		int result = 0;
+		
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			
+			String url = "jdbc:mariadb://127.0.0.1:3306/super_market";
+			String id = "scott";
+			String pw = "tiger";
+			conn = DriverManager.getConnection(url, id, pw);
+			
+			String sql = "UPDATE sm_product SET prod_inven = prod_inven + ? WHERE prod_no = ?";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, amount);
+			pstmt.setInt(2, prodNo);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
+	}
 }

@@ -166,6 +166,18 @@ public class SmMenu {
 	public void instockProduct() {
 		System.out.println("입고 정보를 입력해주세요");
 		System.out.print("제품 번호 : ");
+		int prodNo = scan.nextInt();
+		scan.nextLine();
+		System.out.print("입고 개수 : ");
+		int amount = scan.nextInt();
+		scan.nextLine();
 		
+		int result = sc.updateProduct(prodNo, amount);
+		
+		if(result > 0) {
+			System.out.println("입고가 정상적으로 이루어졌습니다.");
+		} else {
+			System.out.println("입고 처리 중 문제가 발생했습니다.");
+		}
 	}
 }
