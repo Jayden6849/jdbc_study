@@ -5,7 +5,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.gn.supermarket.model.vo.SmBuy;
+import com.gn.supermarket.model.vo.SmProduct;
 import com.gn.supermarket.model.vo.SmUser;
 
 public class SmDao {
@@ -210,6 +214,134 @@ public class SmDao {
 			pstmt.setInt(2, prodNo);
 			
 			result = pstmt.executeUpdate();
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
+	}
+	
+	// sm_buy 테이블와 다른 테이블을 조인해서 필요한 모든 데이터를 리스트에 담아 반환하는 로직
+	public List<SmBuy> selectSalesAll() {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		List<SmBuy> list = null;
+		
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			
+			String url = "jdbc:mariadb://127.0.0.1:3306/super_market";
+			String id = "scott";
+			String pw = "tiger";
+			conn = DriverManager.getConnection(url, id, pw);
+			
+			String sql = "SELECT u.user_nickname ,p.prod_name ,b.buy_amount"
+					+ " FROM sm_buy b"
+					+ " JOIN sm_user u ON b.buy_userno = u.user_no"
+					+ " JOIN sm_product p ON b.buy_prodno = p.prod_no";
+			pstmt = conn.prepareStatement(sql);
+			
+			rs = pstmt.executeQuery();
+			
+			list = new ArrayList<>();
+			while(rs.next()) {
+				SmBuy sb = new SmBuy();
+				sb.setUserNickname(rs.getString("u.user_nickname"));
+				sb.setProdName(rs.getString("p.prod_name"));
+				sb.setBuyAmount(rs.getInt("b.buy_mount"));
+				list.add(sb);
+			}
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return list;
+	}
+	
+	public List<SmProduct> selectProductAll() {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		List<SmProduct> list = null;
+		
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			
+			String url = "jdbc:mariadb://127.0.0.1:3306/super_market";
+			String id = "scott";
+			String pw = "tiger";
+			conn = DriverManager.getConnection(url, id, pw);
+			
+			String sql = "SELECT * FROM sm_product";
+			pstmt = conn.prepareStatement(sql);
+			
+			rs = pstmt.executeQuery();
+			
+			list = new ArrayList<>();
+			while(rs.next()) {
+				SmProduct sp = new SmProduct();
+				sp.setProdNo(rs.getInt("prod_no"));
+				sp.setProdName(rs.getString("prod_name"));
+				sp.setProdPrice(rs.getInt("prod_price"));
+				sp.setProdInven(rs.getInt("prod_inven"));
+				list.add(sp);
+			}
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return list;
+	}
+	
+	public int buyProduct(String userId, int prodNo, int amount) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		int result = 0;
+		
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			
+			String url = "jdbc:mariadb://127.0.0.1:3306/super_market";
+			String id = "scott";
+			String pw = "tiger";
+			conn = DriverManager.getConnection(url, id, pw);
+			
+			String sql1 = "";
+			String sql2 = "";
 			
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();

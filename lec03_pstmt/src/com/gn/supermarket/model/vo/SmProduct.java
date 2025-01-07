@@ -53,7 +53,7 @@ public class SmProduct {
 	
 	@Override
 	public String toString() {
-		return "SmProduct [prodNo=" + prodNo + ", prodName=" + prodName + ", prodPrice=" + prodPrice + ", prodInven="
+		return "[제품번호=" + prodNo + ", 제품명=" + prodName + ", 가격=" + prodPrice + ", 구매가능 개수="
 				+ prodInven + "]";
 	}
 }

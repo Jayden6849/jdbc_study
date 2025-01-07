@@ -4,7 +4,9 @@ public class SmBuy {
 	// field
 	private int buyNo;
 	private int userNo;
+	private String userNickname;
 	private int prodNo;
+	private String prodName;
 	private int buyAmount;
 	
 	// constructor
@@ -43,6 +45,18 @@ public class SmBuy {
 	}
 	public void setBuyAmount(int buyAmount) {
 		this.buyAmount = buyAmount;
+	}
+	public String getUserNickname() {
+		return userNickname;
+	}
+	public void setUserNickname(String userNickname) {
+		this.userNickname = userNickname;
+	}
+	public String getProdName() {
+		return prodName;
+	}
+	public void setProdName(String prodName) {
+		this.prodName = prodName;
 	}
 	
 	@Override

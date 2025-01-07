@@ -1,6 +1,10 @@
 package com.gn.supermarket.controller;
 
+import java.util.List;
+
 import com.gn.supermarket.model.dao.SmDao;
+import com.gn.supermarket.model.vo.SmBuy;
+import com.gn.supermarket.model.vo.SmProduct;
 import com.gn.supermarket.model.vo.SmUser;
 
 public class SmController {
@@ -30,4 +34,20 @@ public class SmController {
 	public int updateProduct(int prodNo, int amount) {
 		return sd.updateProduct(prodNo, amount);
 	}
+	
+	// sm_buy 테이블와 다른 테이블을 조인해서 필요한 모든 데이터를 리스트에 담아 반환하는 로직
+	public List<SmBuy> selectSalesAll() {
+		return sd.selectSalesAll();
+	}
+	
+	// sm_product 테이블의 모든 정보를 조회하는 로직
+	public List<SmProduct> selectProductAll() {
+		return sd.selectProductAll();
+	}
+	
+	// prodNo, amount를 매개로 sm_buy와 sm_product를 수정하는 로직
+	public int buyProduct(String userId, int prodNo, int amount) {
+		return sd.buyProduct(userId, prodNo, amount);
+	}
+	
 }
