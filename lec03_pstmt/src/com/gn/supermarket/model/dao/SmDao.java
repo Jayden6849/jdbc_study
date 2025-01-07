@@ -97,4 +97,54 @@ public class SmDao {
 		
 		return result;
 	}
+	
+	// 아이디와 비밀번호로 조회해서 객체로 담아 반환 = 로그인하는 로직
+	public SmUser selectByIdAndPw(String userId, String userPw) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		SmUser su = null;
+		
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			
+			String url = "jdbc:mariadb://127.0.0.1:3306/super_market";
+			String id = "scott";
+			String pw = "tiger";
+			conn = DriverManager.getConnection(url, id, pw);
+			
+			String sql = "SELECT * FROM sm_user WHERE user_id = ? AND user_pw = ?";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, userId);
+			pstmt.setString(2, userPw);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				su = new SmUser();
+				su.setUserNo(rs.getInt("user_no"));
+				su.setUserId(rs.getString("user_id"));
+				su.setUserPw(rs.getString("user_pw"));
+				su.setUserNickname(rs.getString("user_nickname"));
+				su.setRegDate(rs.getTimestamp("reg_date").toLocalDateTime());
+				su.setModDate(rs.getTimestamp("mod_date").toLocalDateTime());
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+				pstmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return su;
+	}
 }

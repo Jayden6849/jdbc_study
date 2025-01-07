@@ -28,6 +28,7 @@ public class SmMenu {
 				signUp();
 				break;
 			case 2:
+				logIn();
 				break;
 			default:
 				System.out.println("올바른 메뉴를 선택해주세요");
@@ -57,6 +58,30 @@ public class SmMenu {
 			}
 		} else {
 			System.out.println("이미 동일한 아이디가 존재합니다");
+		}
+	}
+	
+	public void logIn() {
+		System.out.println("*** 로그인 ***");
+		System.out.print("아이디 : ");
+		String id = scan.nextLine();
+		System.out.print("비밀번호 : ");
+		String pw = scan.nextLine();
+		
+		SmUser su = sc.selectByIdAndPw(id, pw);
+		
+		if(su != null) {
+			if("admin".equals(su.getUserId())) {
+				// 관리자 메뉴로 이동
+				System.out.println("*** 관리자 메뉴 ***");
+			} else {
+				// 사용자 메뉴로 이동
+				System.out.println("'" + su.getUserNickname() + "'님 환영합니다!");
+				System.out.println("*** 회원 메뉴 ***");
+			}
+		} else {
+			System.out.println("아이디와 비밃번호를 다시 확인해주세요.");
+			return;
 		}
 	}
 }

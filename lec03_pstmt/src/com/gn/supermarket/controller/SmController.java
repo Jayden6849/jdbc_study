@@ -15,4 +15,9 @@ public class SmController {
 	public int insertUser(String id, String pw, String nickname) {
 		return sd.insertUser(id, pw, nickname);
 	}
+	
+	// 아이디와 비밀번호가 맞다면 로그인하는 로직
+	public SmUser selectByIdAndPw(String id, String pw) {
+		return sd.selectByIdAndPw(id, pw);
+	}
 }
