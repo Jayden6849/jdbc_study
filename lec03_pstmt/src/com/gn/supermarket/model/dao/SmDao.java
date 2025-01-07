@@ -328,7 +328,8 @@ public class SmDao {
 	
 	public int buyProduct(String userId, int prodNo, int amount) {
 		Connection conn = null;
-		PreparedStatement pstmt = null;
+		PreparedStatement pstmt1 = null;
+		PreparedStatement pstmt2 = null;
 		
 		int result = 0;
 		
@@ -340,16 +341,41 @@ public class SmDao {
 			String pw = "tiger";
 			conn = DriverManager.getConnection(url, id, pw);
 			
-			String sql1 = "";
-			String sql2 = "";
+			conn.setAutoCommit(false);
 			
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
+			String sql1 = "INSERT sm_buy (buy_userno ,buy_prodno ,buy_amount)"
+					+ " VALUES ((SELECT user_no"
+					+ " FROM sm_user"
+					+ " WHERE user_id = ?), ?, ?)";
+			pstmt1 = conn.prepareStatement(sql1);
+			
+			pstmt1.setString(1, userId);
+			pstmt1.setInt(2, prodNo);
+			pstmt1.setInt(3, amount);
+			
+			result = pstmt1.executeUpdate();
+			
+			String sql2 = "UPDATE sm_product"
+					+ " SET prod_inven = prod_inven - ?"
+					+ " WHERE prod_no = ?";
+			pstmt2 = conn.prepareStatement(sql2);
+			
+			pstmt2.setInt(1, amount);
+			pstmt2.setInt(2, prodNo);
+			
+			result = pstmt2.executeUpdate();
+			
+			conn.commit();
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				System.out.println("재고가 부족합니다.");
+			}
 		} finally {
 			try {
-				pstmt.close();
+				pstmt2.close();
+				pstmt1.close();
 				conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();

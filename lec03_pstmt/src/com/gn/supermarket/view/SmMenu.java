@@ -201,7 +201,7 @@ public class SmMenu {
 		
 		System.out.print("구매할 제품번호 : ");
 		int prodNo = scan.nextInt();
-		scan.nextInt();
+		scan.nextLine();
 		System.out.print("구매할 개수 : ");
 		int amount = scan.nextInt();
 		scan.nextLine();
