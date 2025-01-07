@@ -138,9 +138,14 @@ public class SmMenu {
 				buyProduct(id);
 				break;
 			case 2:
+				editUserInfo(id);
 				break;
 			case 3:
-				break;
+				boolean chkWithdraw = withdraw(id);
+				if(chkWithdraw)
+					return;
+				else
+					break;
 			default:
 				System.out.println("올바른 메뉴를 선택해주세요.");
 				continue;
@@ -206,12 +211,80 @@ public class SmMenu {
 		int amount = scan.nextInt();
 		scan.nextLine();
 		
-		int result = sc.buyProduct(userId, prodNo, amount);
+		SmProduct sp = sc.chkInStock(prodNo, amount);
 		
-		if(result > 0) {
-			System.out.println("제품 구매가 완료되었습니다.");
+		if(sp != null) {
+			if(sp.getProdInven() >= amount) {
+				int result = sc.buyProduct(userId, prodNo, amount);
+				
+				if(result > 0) {
+					System.out.println("제품 구매가 완료되었습니다.");
+				} else {
+					System.out.println("제품 구매 도중 문제가 발생하였습니다.");
+				}
+			} else {
+				System.out.println("재고가 부족합니다.");
+			}
 		} else {
-			System.out.println("제품 구매 도중 문제가 발생하였습니다.");
+			System.out.println("제품 번호를 다시 확인해주세요.");
+		}
+	}
+	
+	public void editUserInfo(String id) {
+		System.out.println("*** 개인 정보 수정 ***");
+		System.out.println("본인 확인을 위해 비밀번호를 입력해주세요.");
+		System.out.print("비밀번호 : ");
+		String pw = scan.nextLine();
+		
+		SmUser su = sc.selectByIdAndPw(id, pw);
+		
+		if(su != null) {
+			System.out.println("변경하실 닉네임을 입력해주세요.");
+			System.out.print("새로운 닉네임 : ");
+			String nickname = scan.nextLine();
+			
+			int result = sc.updateUserName(id, pw, nickname);
+			if(result > 0) {
+				System.out.println("닉네임 수정이 정상적으로 완료되었습니다.");
+			} else {
+				System.out.println("닉네임 수정 도중 문제가 발생했습니다.");
+			}
+		} else {
+			System.out.println("비밀번호를 다시 확인해주세요.");
+		}
+	}
+	
+	public boolean withdraw(String id) {
+		System.out.println("*** 회원 탈퇴 ***");
+		System.out.println("본인 확인을 위해 비밀번호를 입력해주세요.");
+		System.out.print("비밀번호 : ");
+		String pw = scan.nextLine();
+		
+		SmUser su = sc.selectByIdAndPw(id, pw);
+		
+		if(su != null) {
+			while(true) {				
+				System.out.print("정말 탈퇴하시겠습니다?(y/n) : ");
+				String answer = scan.nextLine();
+				
+				if("y".equalsIgnoreCase(answer)) {
+					int result = sc.deleteUser(id, pw);
+					
+					if(result > 0) {
+						System.out.println("성공적으로 탈퇴가 이루어졌습니다.");
+					} else {
+						System.out.println("탈퇴 도중 오류가 발생했습니다.");
+					}
+					return true;
+				} else if ("n".equalsIgnoreCase(answer)) {
+					return false;
+				} else {
+					System.out.println("올바른 값을 입력해주세요.(y/n) :");
+				}
+			}
+		} else {
+			System.out.println("비밀번호를 다시 확인해주세요.");
+			return false;
 		}
 	}
 	

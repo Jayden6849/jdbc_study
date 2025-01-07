@@ -326,10 +326,56 @@ public class SmDao {
 		return list;
 	}
 	
+	public SmProduct chkInStock(int prodNo, int amount) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		SmProduct sp = null;
+		
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			
+			String url = "jdbc:mariadb://127.0.0.1:3306/super_market";
+			String id = "scott";
+			String pw = "tiger";
+			conn = DriverManager.getConnection(url, id, pw);
+			
+			String sql = "SELECT * FROM sm_product WHERE prod_no = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, prodNo);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				sp = new SmProduct();
+				sp.setProdNo(rs.getInt("prod_no"));
+				sp.setProdName(rs.getString("prod_name"));
+				sp.setProdPrice(rs.getInt("prod_price"));
+				sp.setProdInven(rs.getInt("prod_inven"));
+			}
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+				pstmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return sp;
+	}
+	
 	public int buyProduct(String userId, int prodNo, int amount) {
 		Connection conn = null;
-		PreparedStatement pstmt1 = null;
-		PreparedStatement pstmt2 = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		
 		int result = 0;
 		
@@ -347,35 +393,111 @@ public class SmDao {
 					+ " VALUES ((SELECT user_no"
 					+ " FROM sm_user"
 					+ " WHERE user_id = ?), ?, ?)";
-			pstmt1 = conn.prepareStatement(sql1);
+			pstmt = conn.prepareStatement(sql1);
 			
-			pstmt1.setString(1, userId);
-			pstmt1.setInt(2, prodNo);
-			pstmt1.setInt(3, amount);
+			pstmt.setString(1, userId);
+			pstmt.setInt(2, prodNo);
+			pstmt.setInt(3, amount);
 			
-			result = pstmt1.executeUpdate();
+			result = pstmt.executeUpdate();
 			
 			String sql2 = "UPDATE sm_product"
 					+ " SET prod_inven = prod_inven - ?"
 					+ " WHERE prod_no = ?";
-			pstmt2 = conn.prepareStatement(sql2);
+			pstmt = conn.prepareStatement(sql2);
 			
-			pstmt2.setInt(1, amount);
-			pstmt2.setInt(2, prodNo);
+			pstmt.setInt(1, amount);
+			pstmt.setInt(2, prodNo);
 			
-			result = pstmt2.executeUpdate();
+			result = pstmt.executeUpdate();
 			
 			conn.commit();
-		} catch (Exception e) {
+		} catch (ClassNotFoundException e) { 
+			e.printStackTrace();
+		} catch (SQLException e) {
 			try {
 				conn.rollback();
 			} catch (SQLException e1) {
-				System.out.println("재고가 부족합니다.");
+				e1.printStackTrace();
 			}
+			e.printStackTrace();
 		} finally {
 			try {
-				pstmt2.close();
-				pstmt1.close();
+				pstmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
+	}
+	
+	public int updateUserName(String userId, String userPw, String userNickname) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		int result = 0;
+		
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			
+			String url = "jdbc:mariadb://127.0.0.1:3306/super_market";
+			String id = "scott";
+			String pw = "tiger";
+			conn = DriverManager.getConnection(url, id, pw);
+			
+			String sql = "UPDATE sm_user SET user_nickname = ? WHERE user_id = ? AND user_pw = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, userNickname);
+			pstmt.setString(2, userId);
+			pstmt.setString(3, userPw);
+			
+			result = pstmt.executeUpdate();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
+	}
+	
+	public int deleteUser(String userId, String userPw) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		int result = 0;
+		
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			
+			String url = "jdbc:mariadb://127.0.0.1:3306/super_market";
+			String id = "scott";
+			String pw = "tiger";
+			conn = DriverManager.getConnection(url, id, pw);
+			
+			String sql = "DELETE FROM sm_user WHERE user_id = ? AND user_pw = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, userId);
+			pstmt.setString(2, userPw);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				pstmt.close();
 				conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();

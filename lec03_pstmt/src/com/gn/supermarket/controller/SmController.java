@@ -50,4 +50,18 @@ public class SmController {
 		return sd.buyProduct(userId, prodNo, amount);
 	}
 	
+	// 구매할만큼의 재고가 존재하는지 여부 체크하는 로직
+	public SmProduct chkInStock(int prodNo, int amount) {
+		return sd.chkInStock(prodNo, amount);
+	}
+	
+	// sm_user 테이블에서 id와 pw가 일치하는 데이터의 닉네임을 바꾸는 로직
+	public int updateUserName(String id, String pw, String nickname) {
+		return sd.updateUserName(id, pw, nickname);
+	}
+	
+	// sm_user 테이블에서 id와 pw가 일치하는 데이터를 삭제하는 로직
+	public int deleteUser(String id, String pw) {
+		return sd.deleteUser(id, pw);
+	}
 }
