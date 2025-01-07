@@ -20,4 +20,9 @@ public class SmController {
 	public SmUser selectByIdAndPw(String id, String pw) {
 		return sd.selectByIdAndPw(id, pw);
 	}
+	
+	// sm_product 테이블에 제품을 추가하는 로직
+	public int insertProduct(String prodName, int prodPrice, int prodInven) {
+		return sd.insertProduct(prodName, prodPrice, prodInven);
+	}
 }

@@ -147,4 +147,44 @@ public class SmDao {
 		
 		return su;
 	}
+	
+	// sm_product 테이블에 제품을 추가하는 로직
+	public int insertProduct(String prodName, int prodPrice, int prodInven) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		int result = 0;
+		
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			
+			String url = "jdbc:mariadb://127.0.0.1:3306/super_market";
+			String id = "scott";
+			String pw = "tiger";
+			conn = DriverManager.getConnection(url, id, pw);
+			
+			String sql = "INSERT INTO sm_product (prod_name ,prod_price ,prod_inven) VALUES (? ,? ,?)";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, prodName);
+			pstmt.setInt(2, prodPrice);
+			pstmt.setInt(3, prodInven);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
+	}
 }

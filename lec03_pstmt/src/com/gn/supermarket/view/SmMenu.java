@@ -101,8 +101,10 @@ public class SmMenu {
 				System.out.println("로그아웃 되었습니다.");
 				return;
 			case 1:
+				regProduct();
 				break;
 			case 2:
+				instockProduct();
 				break;
 			case 3:
 				break;
@@ -139,5 +141,31 @@ public class SmMenu {
 				continue;
 			}
 		}
+	}
+	
+	public void regProduct() {
+		System.out.println("등록하실 제품 정보를 입력해주세요");
+		System.out.print("제품명 : ");
+		String prodName = scan.nextLine();
+		System.out.print("제품 가격 : ");
+		int prodPrice = scan.nextInt();
+		scan.nextLine();
+		System.out.print("입고 개수 : ");
+		int prodInven = scan.nextInt();
+		scan.nextLine();
+		
+		int result = sc.insertProduct(prodName, prodPrice, prodInven);
+		
+		if(result > 0) {
+			System.out.println("정상적으로 제품이 추가되었습니다.");
+		} else {
+			System.out.println("제품 추가 도중 문제가 발생했습니다.");
+		}
+	}
+	
+	public void instockProduct() {
+		System.out.println("입고 정보를 입력해주세요");
+		System.out.print("제품 번호 : ");
+		
 	}
 }
