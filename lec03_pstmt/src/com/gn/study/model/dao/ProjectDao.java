@@ -101,4 +101,54 @@ public class ProjectDao {
 		
 		return list;
 	}
+	
+	public List<ProjectVo> selectProjectAllByName(String projectName) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		List<ProjectVo> list = null;
+		
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			
+			String url = "jdbc:mariadb://127.0.0.1:3306/company_project";
+			String id = "scott";
+			String pw = "tiger";
+			conn = DriverManager.getConnection(url, id, pw);
+			
+			String sql = "SELECT * FROM project WHERE project_name LIKE CONCAT('%', ?, '%')";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, projectName);
+			
+			rs = pstmt.executeQuery();
+			
+			list = new ArrayList<>();
+			while(rs.next()) {
+				ProjectVo vo = new ProjectVo();
+				vo.setProjectId(rs.getInt("project_id"));
+				vo.setProjectName(rs.getString("project_name"));
+				vo.setProjectManager(rs.getInt("project_manager"));
+				vo.setReg_date(rs.getTimestamp("reg_date").toLocalDateTime());
+				vo.setMod_date(rs.getTimestamp("mod_date").toLocalDateTime());
+				list.add(vo);
+			}
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+				pstmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return list;
+	}
 }

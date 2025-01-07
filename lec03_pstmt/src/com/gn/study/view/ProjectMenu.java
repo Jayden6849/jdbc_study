@@ -32,6 +32,7 @@ public class ProjectMenu {
 					showProjectAll();
 					break;
 				case 3:
+					searchByProjectName();
 					break;
 				case 4:
 					break;
@@ -75,6 +76,23 @@ public class ProjectMenu {
 			}
 		} else {
 			System.out.println("조회된 프로젝트 정보가 없습니다.");
+		}
+	}
+	
+	public void searchByProjectName() {
+		System.out.println("*** 프로젝트명 기준 검색 ***");
+		System.out.println("프로젝트명을 일부 입력하시면 관련된 프로젝트 정보를 조회해드립니다.");
+		System.out.print("프로젝트명 : ");
+		String projectName = sc.nextLine();
+		
+		List<ProjectVo> list = pc.selectProjectAllByName(projectName);
+		
+		if(list.isEmpty()) {
+			System.out.println("조회된 프로젝트가 없습니다.");			
+		} else {
+			for(ProjectVo vo : list) {
+				System.out.println(vo);
+			}
 		}
 	}
 }

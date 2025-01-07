@@ -15,4 +15,8 @@ public class ProjectController {
 	public List<ProjectVo> selectProjectAll() {
 		return pd.selectProjectAll();
 	}
+	
+	public List<ProjectVo> selectProjectAllByName(String projectName) {
+		return pd.selectProjectAllByName(projectName);
+	}
 }
