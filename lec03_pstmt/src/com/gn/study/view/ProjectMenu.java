@@ -1,8 +1,10 @@
 package com.gn.study.view;
 
+import java.util.List;
 import java.util.Scanner;
 
 import com.gn.study.controller.ProjectController;
+import com.gn.study.model.vo.ProjectVo;
 
 public class ProjectMenu {
 	private Scanner sc = new Scanner(System.in);	// 입력
@@ -27,6 +29,7 @@ public class ProjectMenu {
 					createProject();
 					break;
 				case 2:
+					showProjectAll();
 					break;
 				case 3:
 					break;
@@ -59,6 +62,19 @@ public class ProjectMenu {
 			System.out.println("프로젝트 추가가 정상적으로 완료되었습니다.");
 		} else {
 			System.out.println("프로젝트 추가 중 오류가 발생하였습니다.");
+		}
+	}
+	
+	public void showProjectAll() {
+		System.out.println("*** 프로젝트 전체 조회 ***");
+		List<ProjectVo> list = pc.selectProjectAll();
+		
+		if(list != null) {
+			for(ProjectVo p : list) {
+				System.out.println(p);
+			}
+		} else {
+			System.out.println("조회된 프로젝트 정보가 없습니다.");
 		}
 	}
 }
