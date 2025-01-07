@@ -107,6 +107,7 @@ public class SmMenu {
 				instockProduct();
 				break;
 			case 3:
+				showSalesAll();
 				break;
 			default:
 				System.out.println("올바른 메뉴를 선택해주세요.");
@@ -179,5 +180,10 @@ public class SmMenu {
 		} else {
 			System.out.println("입고 처리 중 문제가 발생했습니다.");
 		}
+	}
+	
+	public void showSalesAll() {
+		System.out.println("*** 판매 현황 ***");
+		
 	}
 }

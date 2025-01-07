@@ -205,4 +205,79 @@ public class ProjectDao {
 		
 		return list;
 	}
+	
+	public int updateProjectOne(int projectNo, String projectName) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		int result = 0;
+		
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			
+			String url = "jdbc:mariadb://127.0.0.1:3306/company_project";
+			String id = "scott";
+			String pw = "tiger";
+			conn = DriverManager.getConnection(url, id, pw);
+			
+			String sql = "UPDATE project SET project_name = ? WHERE project_id = ?";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, projectName);
+			pstmt.setInt(2, projectNo);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
+	}
+	
+	public int deleteProjectOne(int projectNo) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;		
+		
+		int result = 0;
+		
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			
+			String url = "jdbc:mariadb://127.0.0.1:3306/company_project";
+			String id = "scott";
+			String pw = "tiger";
+			conn = DriverManager.getConnection(url, id, pw);
+			
+			String sql = "DELETE FROM project WHERE project_id = ?";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, projectNo);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
+	}
 }

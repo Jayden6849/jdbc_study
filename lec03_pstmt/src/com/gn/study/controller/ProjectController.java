@@ -23,4 +23,12 @@ public class ProjectController {
 	public List<ProjectVo> selectProjectAllByManagerName(String managerName) {
 		return pd.selectProjectAllByManagerName(managerName);
 	}
+	
+	public int updateProjectOne(int projectNo, String projectName) {
+		return pd.updateProjectOne(projectNo, projectName);
+	}
+	
+	public int deleteProjectOne(int projectNo) {
+		return pd.deleteProjectOne(projectNo);
+	}
 }
