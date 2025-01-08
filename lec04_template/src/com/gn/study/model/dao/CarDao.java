@@ -242,9 +242,7 @@ public class CarDao {
 		PreparedStatement pstmt = null;
 		
 		int result = 0;
-		
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		
+				
 		try {
 			String sql = "UPDATE car SET";
 			pstmt = conn.prepareStatement(sql);
@@ -272,17 +270,17 @@ public class CarDao {
 				if(cnt == 1) {
 					sql += " car_date = ?";
 				} else {
-					sql += " ,car_date = ?";					
+					sql += " ,car_date = str_to_date(?, '%Y-%m-%d')";
 				}
-				pstmt.setString(cnt, "str_to_date('carDate', '%Y-%m-%d'");
+				pstmt.setString(cnt, carDate);
 				cnt++;
 			}
-			
 			sql += " WHERE car_no = ?";
+			System.out.println(sql);
 			pstmt.setInt(cnt, carNo);
 					
 			result = pstmt.executeUpdate();
-			
+		
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {

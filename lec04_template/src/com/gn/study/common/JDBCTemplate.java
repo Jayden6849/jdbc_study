@@ -1,21 +1,26 @@
 package com.gn.study.common;
 
+import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class JDBCTemplate {
 	public static Connection getConnection() {
 		Connection conn = null;
 		
 		try {
-			Class.forName("org.mariadb.jdbc.Driver");
+			Properties prop = new Properties();
+			prop.load(new FileInputStream("resources/db.properties"));
 			
-			String url = "jdbc:mariadb://127.0.0.1:3306/jdbc_basic";
-			String id = "scott";
-			String pw = "tiger";
+			Class.forName(prop.getProperty("driver"));
+			
+			String url = prop.getProperty("url");
+			String id = prop.getProperty("user");
+			String pw = prop.getProperty("pw");
 			conn = DriverManager.getConnection(url, id, pw);
 		
 		} catch (ClassNotFoundException e) {
