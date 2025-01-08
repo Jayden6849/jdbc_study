@@ -6,8 +6,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -239,52 +239,49 @@ public class CarDao {
 	}
 	
 	public int updateCarInfo(int carNo, String carModel, int carPrice, String carDate, Connection conn) {
-		PreparedStatement pstmt = null;
+		Statement stmt = null;
 		
 		int result = 0;
 				
 		try {
+			stmt = conn.createStatement();
+			
 			String sql = "UPDATE car SET";
-			pstmt = conn.prepareStatement(sql);
 			
 			int cnt = 1;
 			if(carModel != null) {
 				if(cnt == 1) {
-					sql += " car_model = ?";
+					sql += " car_model = '"+carModel+"'";
 				} else {
-					sql += " ,car_model = ?";
+					sql += " ,car_model = '"+carModel+"'";
 				}
-				pstmt.setString(cnt, carModel);
 				cnt++;
 			}
 			if(carPrice != -1) {
 				if(cnt == 1) {
-					sql += " car_price = ?";					
+					sql += " car_price = '"+carPrice+"'";					
 				} else {
-					sql += " ,car_price = ?";										
+					sql += " ,car_price = '"+carPrice+"'";										
 				}
-				pstmt.setInt(cnt, carPrice);				
 				cnt++;
 			}
 			if(carDate != null) {
 				if(cnt == 1) {
-					sql += " car_date = ?";
+					sql += " car_date = str_to_date('"+carDate+"', '%Y-%m-%d')";
 				} else {
-					sql += " ,car_date = str_to_date(?, '%Y-%m-%d')";
+					sql += " ,car_date = str_to_date('"+carDate+"', '%Y-%m-%d')";
 				}
-				pstmt.setString(cnt, carDate);
 				cnt++;
 			}
-			sql += " WHERE car_no = ?";
+			sql += " WHERE car_no = '"+carNo+"'";
 			System.out.println(sql);
-			pstmt.setInt(cnt, carNo);
 					
-			result = pstmt.executeUpdate();
+			result = stmt.executeUpdate(sql);
 		
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			close(pstmt);
+			close(stmt);
 		}
 		
 		return result;
