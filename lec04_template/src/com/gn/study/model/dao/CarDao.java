@@ -274,7 +274,6 @@ public class CarDao {
 				cnt++;
 			}
 			sql += " WHERE car_no = '"+carNo+"'";
-			System.out.println(sql);
 					
 			result = stmt.executeUpdate(sql);
 		
