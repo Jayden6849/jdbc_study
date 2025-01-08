@@ -63,4 +63,22 @@ public class CarService {
 		
 		return list;
 	}
+	
+	public int updateCarInfo(int carNo, String carModel, int carPrice, String carDate) {
+		Connection conn = getConnection();
+		
+		int result = cd.updateCarInfo(carNo, carModel, carPrice, carDate, conn);
+		close(conn);
+		
+		return result;
+	}
+	
+	public int deleteCarOne(int carNo) {
+		Connection conn = getConnection();
+		
+		int result = cd.deleteCarOne(carNo, conn);
+		close(conn);
+		
+		return result;
+	}
 }

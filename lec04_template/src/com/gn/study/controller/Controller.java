@@ -34,4 +34,12 @@ public class Controller {
 	public List<Car> selectCarByModelDate(String modelDate) {
 		return cs.selectCarByModelDate(modelDate);
 	}
+	
+	public int updateCarInfo(int carNo, String carModel, int carPrice, String carDate) {
+		return cs.updateCarInfo(carNo, carModel, carPrice, carDate);
+	}
+	
+	public int deleteCarOne(int carNo) {
+		return cs.deleteCarOne(carNo);
+	}
 }

@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -235,5 +236,81 @@ public class CarDao {
 		}
 		
 		return list;
+	}
+	
+	public int updateCarInfo(int carNo, String carModel, int carPrice, String carDate, Connection conn) {
+		PreparedStatement pstmt = null;
+		
+		int result = 0;
+		
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		
+		try {
+			String sql = "UPDATE car SET";
+			pstmt = conn.prepareStatement(sql);
+			
+			int cnt = 1;
+			if(carModel != null) {
+				if(cnt == 1) {
+					sql += " car_model = ?";
+				} else {
+					sql += " ,car_model = ?";
+				}
+				pstmt.setString(cnt, carModel);
+				cnt++;
+			}
+			if(carPrice != -1) {
+				if(cnt == 1) {
+					sql += " car_price = ?";					
+				} else {
+					sql += " ,car_price = ?";										
+				}
+				pstmt.setInt(cnt, carPrice);				
+				cnt++;
+			}
+			if(carDate != null) {
+				if(cnt == 1) {
+					sql += " car_date = ?";
+				} else {
+					sql += " ,car_date = ?";					
+				}
+				pstmt.setString(cnt, "str_to_date('carDate', '%Y-%m-%d'");
+				cnt++;
+			}
+			
+			sql += " WHERE car_no = ?";
+			pstmt.setInt(cnt, carNo);
+					
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+	
+	
+	public int deleteCarOne(int carNo, Connection conn) {
+		PreparedStatement pstmt = null;
+		
+		int result = 0;
+		
+		try {
+			String sql = "DELETE FROM car WHERE car_no = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, carNo);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
 	}
 }

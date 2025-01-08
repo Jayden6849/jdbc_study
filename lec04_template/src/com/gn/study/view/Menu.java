@@ -41,8 +41,10 @@ public class Menu {
 				selectCarByModelName();
 				break;
 			case 4:
+				updateCarInfo();
 				break;
 			case 5:
+				deleteCarOne();
 				break;
 			default:
 				System.out.println("올바른 값을 입력해주세요");
@@ -168,5 +170,64 @@ public class Menu {
 		} else {
 			System.out.println("조회된 결과가 없습니다.");
 		}
+	}
+	
+	public void updateCarInfo() {
+		System.out.println("=== 수정 ===");
+		List<Car> list = controller.selectCarAll();
+		printList(list);
+		
+		String flag = "";
+		System.out.println("어떤 모델을 수정하시겠습니까?");
+		System.out.print("번호 : ");
+		int carNo = sc.nextInt();
+		sc.nextLine();
+		
+		String carModel = null;
+		int carPrice = -1;
+		String carDate = null;
+		
+		System.out.print("모델명을 수정하시겠습니까?(Y/N) : ");
+		flag = sc.nextLine();
+		if("Y".equalsIgnoreCase(flag)) {
+			System.out.print("모델명 : ");
+			carModel = sc.nextLine();
+			
+			
+		}
+		
+		System.out.print("가격을 수정하시겠습니까?(Y/N) : ");
+		flag = sc.nextLine();
+		if("Y".equalsIgnoreCase(flag)) {
+			System.out.print("가격 : ");
+			carPrice = sc.nextInt();
+			sc.nextLine();
+		}
+		
+		System.out.print("출시일을 수정하시겠습니까?(Y/N) : ");
+		flag = sc.nextLine();
+		if("Y".equalsIgnoreCase(flag)) {
+			System.out.println("다만, 출시일은 반드시 OOOO-OO-OO 형식으로 입력해주세요.");
+			System.out.print("출시일 : ");
+			carDate = sc.nextLine();
+		}
+		
+		int result = controller.updateCarInfo(carNo, carModel, carPrice, carDate);
+		
+		dmlResultPrint(result, "수정");
+	}
+	
+	public void deleteCarOne() {
+		System.out.println("=== 삭제 ===");
+		System.out.println("삭제할 차량의 번호를 입력해주세요.");
+		List<Car> list = controller.selectCarAll();
+		printList(list);
+		System.out.print("삭제할 차량의 번호 : ");
+		int carNo = sc.nextInt();
+		sc.nextLine();
+		
+		int result = controller.deleteCarOne(carNo);
+		
+		dmlResultPrint(result, "삭제");
 	}
 }
